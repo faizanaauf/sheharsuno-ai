@@ -40,7 +40,7 @@ export default function AppFooter() {
         </div>
 
         {/* Links Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 text-xs font-semibold">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-xs font-semibold">
           <Link href="/about" className="hover:text-[#00513a] transition-colors py-1">
             About SheharSuno
           </Link>
@@ -55,9 +55,6 @@ export default function AppFooter() {
           </Link>
           <Link href="/accessibility" className="hover:text-[#00513a] transition-colors py-1">
             Accessibility
-          </Link>
-          <Link href="/contact" className="hover:text-[#00513a] transition-colors py-1">
-            Contact / Feedback
           </Link>
         </div>
 

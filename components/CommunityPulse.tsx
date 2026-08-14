@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { 
   MapPin, 
@@ -10,14 +11,29 @@ import {
   ArrowRight,
   Info
 } from 'lucide-react';
-import { PAKISTAN_PROVINCES, getCityPulseData } from '@/lib/cities-data';
+import { PAKISTAN_PROVINCES } from '@/lib/cities-data';
+import { 
+  NATIONAL_DEMO_REPORTS, 
+  PAKISTAN_CITIES, 
+  RegionView 
+} from '@/lib/pakistan-map-data';
+
+// Dynamically import Leaflet map with SSR disabled
+const DynamicPakistanMap = dynamic(() => import('@/components/PakistanMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-56 bg-[#e8ede9] rounded-xl flex flex-col items-center justify-center text-center p-4 border border-[#bec9c2]">
+      <div className="w-8 h-8 rounded-full border-3 border-[#00513a]/20 border-t-[#00513a] animate-spin mb-2" />
+      <p className="font-bold text-xs text-[#00513a]">Loading City Map...</p>
+    </div>
+  ),
+});
 
 export default function CommunityPulse() {
   const [selectedCity, setSelectedCity] = useState('Lahore');
   const [selectedProvince, setSelectedProvince] = useState('Punjab');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activePin, setActivePin] = useState<string | null>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -40,7 +56,83 @@ export default function CommunityPulse() {
     }
   }, [isDropdownOpen]);
 
-  const pulseData = getCityPulseData(selectedCity, selectedProvince);
+  // Find city location data to automatically zone into that city
+  const cityLocation = useMemo(() => {
+    const found = PAKISTAN_CITIES.find((c) => c.name.toLowerCase() === selectedCity.toLowerCase());
+    if (found) {
+      return {
+        name: found.name,
+        center: found.center,
+        zoom: 12,
+      } as RegionView;
+    }
+    return {
+      name: selectedCity,
+      center: [31.5204, 74.3587] as [number, number],
+      zoom: 12,
+    } as RegionView;
+  }, [selectedCity]);
+
+  // Reports for the selected city (or national if city has none)
+  const cityReports = useMemo(() => {
+    const filtered = NATIONAL_DEMO_REPORTS.filter(
+      (r) => r.city.toLowerCase() === selectedCity.toLowerCase()
+    );
+    if (filtered.length > 0) return filtered;
+    
+    // If specific city has few seeded records, generate local offset pins around city center
+    return [
+      {
+        id: `PK-${selectedCity.substring(0, 3).toUpperCase()}-001`,
+        title: `Blocked drainage near ${selectedCity} main road`,
+        category: "Drainage" as const,
+        priority: "High" as const,
+        city: selectedCity,
+        provinceOrTerritory: selectedProvince,
+        neighborhood: `${selectedCity} Central`,
+        latitude: cityLocation.center[0] + 0.012,
+        longitude: cityLocation.center[1] + 0.015,
+        status: "Needs action" as const,
+        time: "20m ago",
+        summary: `Rainwater accumulation on main access road in ${selectedCity}. Stormwater drain clogged with debris.`,
+        suggestedDepartment: `Water and Sanitation Authority (${selectedCity})`,
+      },
+      {
+        id: `PK-${selectedCity.substring(0, 3).toUpperCase()}-002`,
+        title: `Garbage disposal delay in ${selectedCity}`,
+        category: "Garbage" as const,
+        priority: "Medium" as const,
+        city: selectedCity,
+        provinceOrTerritory: selectedProvince,
+        neighborhood: `${selectedCity} Sector B`,
+        latitude: cityLocation.center[0] - 0.010,
+        longitude: cityLocation.center[1] - 0.008,
+        status: "Reviewing" as const,
+        time: "1h ago",
+        summary: `Uncollected residential solid waste container overflowing on the sidewalk.`,
+        suggestedDepartment: `Municipal Corporation ${selectedCity}`,
+      },
+      {
+        id: `PK-${selectedCity.substring(0, 3).toUpperCase()}-003`,
+        title: `Streetlight maintenance in ${selectedCity}`,
+        category: "Streetlight" as const,
+        priority: "Low" as const,
+        city: selectedCity,
+        provinceOrTerritory: selectedProvince,
+        neighborhood: `${selectedCity} Civic Center`,
+        latitude: cityLocation.center[0] + 0.005,
+        longitude: cityLocation.center[1] - 0.014,
+        status: "Logged" as const,
+        time: "3h ago",
+        summary: `Public street lighting pole out of service on commercial avenue.`,
+        suggestedDepartment: `Power & Works Division (${selectedCity})`,
+      },
+    ];
+  }, [selectedCity, selectedProvince, cityLocation]);
+
+  const reportsStructuredCount = cityReports.length >= 4 ? 32 : 18;
+  const highPriorityCount = cityReports.filter((r) => r.priority === 'High').length >= 1 ? 8 : 4;
+  const resolvedPercent = 71;
 
   // Filter provinces and cities by search query
   const filteredProvinces = PAKISTAN_PROVINCES.map((prov) => ({
@@ -103,18 +195,18 @@ export default function CommunityPulse() {
               </span>
             </div>
             <div className="flex items-center gap-1 shrink-0 text-[#56615c]">
-              <span className="text-[11px] font-medium hidden sm:inline">Change city</span>
+              <span className="text-[11px] font-medium hidden sm:inline">Select city</span>
               <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
             </div>
           </button>
 
-          {/* Searchable Province-Grouped Dropdown Modal */}
+          {/* Searchable Province-Grouped Dropdown */}
           {isDropdownOpen && (
             <div
               className="absolute left-0 right-0 top-full mt-1.5 bg-white border border-[#bec9c2] rounded-xl shadow-xl z-50 overflow-hidden max-h-80 flex flex-col animate-in fade-in zoom-in-95 duration-150"
               role="listbox"
             >
-              {/* Search input header */}
+              {/* Search input */}
               <div className="p-2.5 border-b border-[#e2e3e0] bg-[#f9faf7]">
                 <div className="flex items-center gap-2 bg-white border border-[#bec9c2] rounded-lg px-2.5 py-1.5 focus-within:ring-2 focus-within:ring-[#00513a]">
                   <Search className="w-3.5 h-3.5 text-[#56615c] shrink-0" />
@@ -123,7 +215,7 @@ export default function CommunityPulse() {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search city or province..."
+                    placeholder="Search city or province in Pakistan..."
                     className="w-full text-xs text-[#191c1b] bg-transparent outline-none placeholder:text-[#56615c]/60"
                   />
                 </div>
@@ -174,28 +266,28 @@ export default function CommunityPulse() {
         <div className="grid grid-cols-3 gap-2.5">
           <div className="bg-[#f3f4f1] p-3 rounded-xl border border-[#e2e3e0] text-center">
             <p className="text-xl md:text-2xl font-extrabold text-[#00513a]">
-              {pulseData.reportsCount}
+              {reportsStructuredCount}
             </p>
             <p className="text-[10px] text-[#56615c] font-semibold mt-0.5">
-              Reports structured
+              reports structured
             </p>
           </div>
           
           <div className="bg-[#ffdad6]/60 p-3 rounded-xl border border-[#ffdad6] text-center">
             <p className="text-xl md:text-2xl font-extrabold text-[#ba1a1a]">
-              {pulseData.highPriorityCount}
+              {highPriorityCount}
             </p>
             <p className="text-[10px] text-[#93000a] font-semibold mt-0.5">
-              High-priority issues
+              high-priority issues
             </p>
           </div>
 
           <div className="bg-[#e8f5e9] p-3 rounded-xl border border-[#c8e6c9] text-center">
             <p className="text-xl md:text-2xl font-extrabold text-[#00513a]">
-              {pulseData.resolvedPercent}%
+              {resolvedPercent}%
             </p>
             <p className="text-[10px] text-[#00513a] font-semibold mt-0.5">
-              Resolved
+              resolved
             </p>
           </div>
         </div>
@@ -205,89 +297,32 @@ export default function CommunityPulse() {
         </p>
       </div>
 
-      {/* Enhanced Stylized Issue Map */}
+      {/* Real Interactive OpenStreetMap Leaflet Map that Auto-Zones into Selected City */}
       <div className="flex flex-col gap-1.5">
         <div className="flex items-center justify-between text-xs font-bold text-[#00513a] px-1">
           <span>Community issue map</span>
           <span className="text-[11px] text-[#56615c] font-semibold">
-            {selectedCity} district · {selectedProvince}
+            {selectedCity} · {selectedProvince}
           </span>
         </div>
 
-        <div className="relative rounded-xl overflow-hidden border border-[#bec9c2]/70 h-48 bg-[#e8ede9]">
-          {/* Stylized road network pattern */}
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                'linear-gradient(to right, rgba(190, 201, 194, 0.45) 1.5px, transparent 1.5px), linear-gradient(to bottom, rgba(190, 201, 194, 0.45) 1.5px, transparent 1.5px)',
-              backgroundSize: '28px 28px',
-            }}
+        {/* Real OpenStreetMap Leaflet Container */}
+        <div className="h-56 w-full rounded-xl overflow-hidden border border-[#bec9c2]/70 shadow-inner">
+          <DynamicPakistanMap
+            reports={cityReports}
+            currentView={cityLocation}
           />
-
-          {/* Issue Pins for the selected city */}
-          {pulseData.pins.map((pin) => {
-            let pinColor = 'bg-[#0060a7]'; // Logged
-            if (pin.priority === 'High') {
-              pinColor = 'bg-[#ba1a1a]';
-            } else if (pin.priority === 'Medium') {
-              pinColor = 'bg-[#e8a000]';
-            }
-
-            const isActive = activePin === pin.id;
-
-            return (
-              <div
-                key={pin.id}
-                style={{ top: pin.top, left: pin.left }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
-                onClick={() => setActivePin(isActive ? null : pin.id)}
-                onMouseEnter={() => setActivePin(pin.id)}
-                onMouseLeave={() => setActivePin(null)}
-                tabIndex={0}
-                role="button"
-                aria-label={`${pin.name}: ${pin.issue} (${pin.priority} priority)`}
-              >
-                <span className="relative flex h-4 w-4 items-center justify-center">
-                  {pin.priority === 'High' && (
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ba1a1a] opacity-75"></span>
-                  )}
-                  <span className={`relative inline-flex rounded-full h-3.5 w-3.5 ${pinColor} border-2 border-white shadow-sm transition-transform group-hover:scale-125`}></span>
-                </span>
-
-                {/* Hover / Focus Tooltip */}
-                <div
-                  className={`absolute left-5 top-1/2 -translate-y-1/2 bg-white/95 text-[#191c1b] px-2.5 py-1 rounded-lg shadow-md border border-[#e2e3e0] text-[10px] whitespace-nowrap z-20 pointer-events-none transition-opacity ${
-                    isActive ? 'opacity-100' : 'opacity-0 hidden group-hover:block'
-                  }`}
-                >
-                  <p className="font-bold text-[#00513a]">{pin.name}</p>
-                  <p className="text-[#56615c] text-[9px]">{pin.issue} · <span className="font-semibold">{pin.priority}</span></p>
-                </div>
-              </div>
-            );
-          })}
-
-          {/* Map Legend */}
-          <div className="absolute bottom-2.5 right-2.5 bg-white/95 backdrop-blur-xs px-2.5 py-1.5 rounded-lg border border-[#e2e3e0] text-[10px] flex items-center gap-3 text-[#56615c] shadow-2xs font-semibold">
-            <div className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#ba1a1a]" />
-              <span>High</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#e8a000]" />
-              <span>Medium</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#0060a7]" />
-              <span>Logged</span>
-            </div>
-          </div>
         </div>
 
-        <p className="text-[10px] text-[#56615c]/80 text-center">
-          Community reports grouped by area and priority.
-        </p>
+        {/* Legend & Caption */}
+        <div className="flex items-center justify-between text-[10px] text-[#56615c] px-1 pt-1">
+          <span>Community reports in {selectedCity}</span>
+          <div className="flex items-center gap-2 font-semibold">
+            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#ba1a1a]" />High</span>
+            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#e8a000]" />Medium</span>
+            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#00513a]" />Other</span>
+          </div>
+        </div>
       </div>
 
       {/* Call to Actions */}
@@ -296,7 +331,7 @@ export default function CommunityPulse() {
           href="/dashboard"
           className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 bg-[#00513a] hover:bg-[#0d6b4f] text-white text-xs md:text-sm font-bold py-2.5 px-4 rounded-xl shadow-2xs hover:shadow transition-all text-center cursor-pointer active:scale-98"
         >
-          <span>View Community Dashboard</span>
+          <span>View full dashboard</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </Link>
 

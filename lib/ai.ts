@@ -46,36 +46,49 @@ export async function analyzeIssue(request: AnalyzeRequest): Promise<AnalyzeResp
       .filter(Boolean)
       .join("\n");
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          system_instruction: {
-            parts: [{ text: SYSTEM_PROMPT }],
-          },
-          contents: [
-            {
-              role: "user",
-              parts: [{ text: userMessage }],
-            },
-          ],
-          generationConfig: {
-            temperature: 0.3,
-            responseMimeType: "application/json",
-          },
-        }),
+    // Primary model as requested: gemini-3.1-flash-lite (with graceful fallback)
+    const modelsToTry = [
+      "gemini-3.1-flash-lite",
+      "gemini-2.5-flash",
+      "gemini-2.0-flash",
+    ];
+
+    let text: string | undefined;
+
+    for (const model of modelsToTry) {
+      try {
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              system_instruction: {
+                parts: [{ text: SYSTEM_PROMPT }],
+              },
+              contents: [
+                {
+                  role: "user",
+                  parts: [{ text: userMessage }],
+                },
+              ],
+              generationConfig: {
+                temperature: 0.3,
+                responseMimeType: "application/json",
+              },
+            }),
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (text) break;
+        }
+      } catch (err) {
+        console.warn(`Model ${model} attempt failed, trying next fallback...`, err);
       }
-    );
-
-    if (!response.ok) {
-      console.error("Gemini API error:", response.status);
-      return getDemoFallback(request.message, request.location);
     }
-
-    const data = await response.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!text) {
       console.error("No text in Gemini response");

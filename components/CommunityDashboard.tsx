@@ -115,7 +115,7 @@ export default function CommunityDashboard() {
       {/* 3. Two-column layout on lg */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* LEFT: Community Issue Map (8 cols) */}
-        <div className="lg:col-span-8 flex flex-col bg-white border border-[#e2e3e0] rounded-2xl overflow-hidden shadow-2xs h-[480px]">
+        <div className="lg:col-span-8 flex flex-col bg-white border border-[#e2e3e0] rounded-2xl overflow-hidden shadow-2xs min-h-[540px] h-[540px]">
           <div className="px-5 py-3.5 border-b border-[#e2e3e0] flex items-center justify-between bg-[#f9faf7]">
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-[#00513a]" />

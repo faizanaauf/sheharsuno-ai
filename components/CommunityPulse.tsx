@@ -214,7 +214,7 @@ export default function CommunityPulse() {
           </span>
         </div>
 
-        <div className="relative rounded-2xl overflow-hidden border border-[#bec9c2]/70 h-64 bg-[#e8ede9] shadow-inner">
+        <div className="relative rounded-2xl overflow-hidden border border-[#bec9c2]/70 min-h-[410px] h-[410px] bg-[#e8ede9] shadow-inner flex flex-col">
           <PakistanMap
             selectedCity={selectedCity}
             onSelectCity={(city, prov) => handleCitySelect(city, prov)}

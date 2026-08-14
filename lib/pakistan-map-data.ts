@@ -25,6 +25,7 @@ export interface NationalIssueReport {
   time: string;
   summary: string;
   suggestedDepartment: string;
+  recommendedAction?: string;
   complaintDraft?: string;
 }
 
@@ -140,8 +141,9 @@ export const NATIONAL_DEMO_REPORTS: NationalIssueReport[] = [
     longitude: 74.3188,
     status: "Needs action",
     time: "15m ago",
-    summary: "Severe water accumulation outside primary school entrance following monsoon rain. Clogged storm sewer preventing student foot access.",
-    suggestedDepartment: "Water and Sanitation Agency (WASA), Lahore",
+    summary: "Severe water accumulation outside primary school entrance following monsoon rainfall. A clogged storm sewer is preventing student foot access.",
+    suggestedDepartment: "Water and Sanitation Agency, Lahore",
+    recommendedAction: "Inspect and clear the blocked drain near the school entrance.",
   },
   // 2. Lahore Garbage
   {

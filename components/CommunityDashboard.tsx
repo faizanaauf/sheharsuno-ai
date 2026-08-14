@@ -24,11 +24,9 @@ import {
   Lightbulb, 
   Waves, 
   ShieldAlert, 
-  HelpCircle,
-  X,
-  ExternalLink
+  HelpCircle
 } from 'lucide-react';
-import Link from 'next/link';
+import ReportDetailModal from '@/components/ReportDetailModal';
 
 // Dynamically import Leaflet map with SSR disabled to prevent 'window is not defined'
 const DynamicPakistanMap = dynamic(() => import('@/components/PakistanMap'), {
@@ -447,7 +445,11 @@ export default function CommunityDashboard() {
                       key={report.id}
                       type="button"
                       onClick={() => setActiveReportModal(report)}
-                      className="text-left p-2.5 rounded-xl border border-[#e2e3e0]/70 hover:border-[#00513a] hover:bg-[#f9faf7] transition-all flex flex-col gap-1 cursor-pointer group"
+                      className={`text-left p-2.5 rounded-xl border transition-all flex flex-col gap-1 cursor-pointer group ${
+                        activeReportModal?.id === report.id
+                          ? 'border-[#00513a] bg-[#f3f4f1] ring-2 ring-[#00513a]/20'
+                          : 'border-[#e2e3e0]/70 hover:border-[#00513a] hover:bg-[#f9faf7]'
+                      }`}
                     >
                       <div className="flex items-start justify-between gap-1.5">
                         <div className="flex items-center gap-1.5">
@@ -479,91 +481,11 @@ export default function CommunityDashboard() {
 
       </div>
 
-      {/* 5. Interactive Report Detail Modal */}
-      {activeReportModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-[#bec9c2] flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-150">
-            {/* Modal Header */}
-            <div className="flex items-start justify-between gap-2 border-b border-[#e2e3e0] pb-3">
-              <div>
-                <span className="text-[10px] font-mono font-bold text-[#56615c]">{activeReportModal.id}</span>
-                <h3 className="text-lg font-extrabold text-[#191c1b] leading-snug mt-0.5">
-                  {activeReportModal.title}
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setActiveReportModal(null)}
-                className="p-1 rounded-full text-[#56615c] hover:bg-[#f3f4f1] transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Badges */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <span
-                className={`text-xs font-bold px-2.5 py-0.5 rounded-full uppercase ${
-                  activeReportModal.priority === 'High'
-                    ? 'bg-[#ffdad6] text-[#93000a]'
-                    : activeReportModal.priority === 'Medium'
-                    ? 'bg-[#fff3e0] text-[#e65100]'
-                    : 'bg-[#e8f5e9] text-[#00513a]'
-                }`}
-              >
-                {activeReportModal.priority} Priority
-              </span>
-
-              <span className="text-xs font-semibold bg-[#f3f4f1] text-[#191c1b] px-2.5 py-0.5 rounded-full border border-[#e2e3e0]">
-                {activeReportModal.category}
-              </span>
-
-              <span className="text-xs font-semibold bg-[#dae5df] text-[#00513a] px-2.5 py-0.5 rounded-full">
-                {activeReportModal.status}
-              </span>
-            </div>
-
-            {/* Location & Summary */}
-            <div className="flex flex-col gap-2 text-xs md:text-sm text-[#56615c]">
-              <div className="flex items-center gap-1.5 font-semibold text-[#191c1b]">
-                <MapPin className="w-4 h-4 text-[#00513a]" />
-                <span>
-                  {activeReportModal.neighborhood ? `${activeReportModal.neighborhood}, ` : ''}
-                  {activeReportModal.city}, {activeReportModal.provinceOrTerritory}
-                </span>
-              </div>
-
-              <div className="bg-[#f9faf7] p-3.5 rounded-xl border border-[#e2e3e0] text-[#191c1b] leading-relaxed">
-                <p className="font-bold text-xs text-[#00513a] mb-1">Issue Description:</p>
-                <p>{activeReportModal.summary}</p>
-              </div>
-
-              <div className="bg-[#f3f4f1] p-3 rounded-xl border border-[#e2e3e0] text-xs">
-                <span className="font-bold text-[#00513a]">Suggested Municipal Authority: </span>
-                <span className="text-[#191c1b]">{activeReportModal.suggestedDepartment}</span>
-              </div>
-            </div>
-
-            {/* Action buttons */}
-            <div className="flex items-center gap-3 pt-2">
-              <Link
-                href={`/result?message=${encodeURIComponent(activeReportModal.summary)}&location=${encodeURIComponent(`${activeReportModal.city}, ${activeReportModal.provinceOrTerritory}`)}`}
-                className="flex-1 bg-[#00513a] hover:bg-[#0d6b4f] text-white text-xs md:text-sm font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-2xs"
-              >
-                <span>View Full AI Draft</span>
-                <ExternalLink className="w-4 h-4" />
-              </Link>
-              <button
-                type="button"
-                onClick={() => setActiveReportModal(null)}
-                className="bg-white border border-[#bec9c2] text-[#56615c] text-xs md:text-sm font-bold py-2.5 px-4 rounded-xl hover:bg-[#f3f4f1] transition-colors"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* 5. Responsive Portal-Rendered Report Detail Modal */}
+      <ReportDetailModal
+        report={activeReportModal}
+        onClose={() => setActiveReportModal(null)}
+      />
 
     </div>
   );

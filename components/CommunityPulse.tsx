@@ -11,13 +11,13 @@ import {
   Info
 } from 'lucide-react';
 import { PAKISTAN_PROVINCES, getCityPulseData } from '@/lib/cities-data';
-import PakistanMap from '@/components/PakistanMap';
 
 export default function CommunityPulse() {
   const [selectedCity, setSelectedCity] = useState('Lahore');
   const [selectedProvince, setSelectedProvince] = useState('Punjab');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [activePin, setActivePin] = useState<string | null>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -208,17 +208,81 @@ export default function CommunityPulse() {
       {/* Enhanced Stylized Issue Map */}
       <div className="flex flex-col gap-1.5">
         <div className="flex items-center justify-between text-xs font-bold text-[#00513a] px-1">
-          <span>Community issue map (National View)</span>
+          <span>Community issue map</span>
           <span className="text-[11px] text-[#56615c] font-semibold">
-            Click any city on map to switch
+            {selectedCity} district · {selectedProvince}
           </span>
         </div>
 
-        <div className="relative rounded-2xl overflow-hidden border border-[#bec9c2]/70 min-h-[410px] h-[410px] bg-[#e8ede9] shadow-inner flex flex-col">
-          <PakistanMap
-            selectedCity={selectedCity}
-            onSelectCity={(city, prov) => handleCitySelect(city, prov)}
+        <div className="relative rounded-xl overflow-hidden border border-[#bec9c2]/70 h-48 bg-[#e8ede9]">
+          {/* Stylized road network pattern */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                'linear-gradient(to right, rgba(190, 201, 194, 0.45) 1.5px, transparent 1.5px), linear-gradient(to bottom, rgba(190, 201, 194, 0.45) 1.5px, transparent 1.5px)',
+              backgroundSize: '28px 28px',
+            }}
           />
+
+          {/* Issue Pins for the selected city */}
+          {pulseData.pins.map((pin) => {
+            let pinColor = 'bg-[#0060a7]'; // Logged
+            if (pin.priority === 'High') {
+              pinColor = 'bg-[#ba1a1a]';
+            } else if (pin.priority === 'Medium') {
+              pinColor = 'bg-[#e8a000]';
+            }
+
+            const isActive = activePin === pin.id;
+
+            return (
+              <div
+                key={pin.id}
+                style={{ top: pin.top, left: pin.left }}
+                className="absolute -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
+                onClick={() => setActivePin(isActive ? null : pin.id)}
+                onMouseEnter={() => setActivePin(pin.id)}
+                onMouseLeave={() => setActivePin(null)}
+                tabIndex={0}
+                role="button"
+                aria-label={`${pin.name}: ${pin.issue} (${pin.priority} priority)`}
+              >
+                <span className="relative flex h-4 w-4 items-center justify-center">
+                  {pin.priority === 'High' && (
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ba1a1a] opacity-75"></span>
+                  )}
+                  <span className={`relative inline-flex rounded-full h-3.5 w-3.5 ${pinColor} border-2 border-white shadow-sm transition-transform group-hover:scale-125`}></span>
+                </span>
+
+                {/* Hover / Focus Tooltip */}
+                <div
+                  className={`absolute left-5 top-1/2 -translate-y-1/2 bg-white/95 text-[#191c1b] px-2.5 py-1 rounded-lg shadow-md border border-[#e2e3e0] text-[10px] whitespace-nowrap z-20 pointer-events-none transition-opacity ${
+                    isActive ? 'opacity-100' : 'opacity-0 hidden group-hover:block'
+                  }`}
+                >
+                  <p className="font-bold text-[#00513a]">{pin.name}</p>
+                  <p className="text-[#56615c] text-[9px]">{pin.issue} · <span className="font-semibold">{pin.priority}</span></p>
+                </div>
+              </div>
+            );
+          })}
+
+          {/* Map Legend */}
+          <div className="absolute bottom-2.5 right-2.5 bg-white/95 backdrop-blur-xs px-2.5 py-1.5 rounded-lg border border-[#e2e3e0] text-[10px] flex items-center gap-3 text-[#56615c] shadow-2xs font-semibold">
+            <div className="flex items-center gap-1">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#ba1a1a]" />
+              <span>High</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#e8a000]" />
+              <span>Medium</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#0060a7]" />
+              <span>Logged</span>
+            </div>
+          </div>
         </div>
 
         <p className="text-[10px] text-[#56615c]/80 text-center">

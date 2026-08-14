@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import AppHeader from "@/components/AppHeader";
+import AppFooter from "@/components/AppFooter";
 import LoadingAnalysis from "@/components/LoadingAnalysis";
 import IssueResultCard from "@/components/IssueResultCard";
 import { AnalyzeResponse } from "@/lib/types";
@@ -68,6 +69,7 @@ function ResultContent() {
           </div>
         ) : null}
       </main>
+      <AppFooter />
       <style jsx global>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(12px); }

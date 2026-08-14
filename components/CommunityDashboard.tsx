@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { communityReports, dashboardMetrics, categoryBreakdown } from '@/lib/demo-data';
 import { CommunityReport } from '@/lib/types';
+import PakistanMap from '@/components/PakistanMap';
 import { 
   FileText, 
   AlertTriangle, 
@@ -18,6 +20,8 @@ import {
 } from 'lucide-react';
 
 export default function CommunityDashboard() {
+  const [activeCity, setActiveCity] = useState('Lahore');
+
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'Drainage':
@@ -111,84 +115,23 @@ export default function CommunityDashboard() {
       {/* 3. Two-column layout on lg */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* LEFT: Community Issue Map (8 cols) */}
-        <div className="lg:col-span-8 flex flex-col bg-white border border-[#e2e3e0] rounded-2xl overflow-hidden shadow-2xs h-[420px]">
+        <div className="lg:col-span-8 flex flex-col bg-white border border-[#e2e3e0] rounded-2xl overflow-hidden shadow-2xs h-[480px]">
           <div className="px-5 py-3.5 border-b border-[#e2e3e0] flex items-center justify-between bg-[#f9faf7]">
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-[#00513a]" />
-              <h2 className="text-sm md:text-base font-bold text-[#191c1b]">Community Issue Map</h2>
+              <h2 className="text-sm md:text-base font-bold text-[#191c1b]">
+                Pakistan Geographic Issue Map · {activeCity}
+              </h2>
             </div>
-            <span className="px-2.5 py-0.5 bg-[#dae5df] text-[#00513a] rounded-full text-xs font-semibold">
-              Lahore City Grid
+            <span className="px-2.5 py-0.5 bg-[#a1f3cf]/30 border border-[#00513a]/20 text-[#00513a] rounded-full text-xs font-bold">
+              Interactive National Grid
             </span>
           </div>
           <div className="flex-1 relative bg-[#e8ede9] overflow-hidden">
-            {/* Grid lines to suggest roads */}
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage:
-                  'linear-gradient(to right, rgba(190, 201, 194, 0.35) 1px, transparent 1px), linear-gradient(to bottom, rgba(190, 201, 194, 0.35) 1px, transparent 1px)',
-                backgroundSize: '32px 32px',
-              }}
+            <PakistanMap
+              selectedCity={activeCity}
+              onSelectCity={(city) => setActiveCity(city)}
             />
-
-            {/* Pins */}
-            <div className="absolute top-[30%] left-[40%] group cursor-pointer">
-              <span className="relative flex h-4 w-4">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ba1a1a] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-4 w-4 bg-[#ba1a1a] border-2 border-white shadow-sm"></span>
-              </span>
-              <span className="absolute left-5 top-0 bg-white/95 text-[10px] font-bold px-2 py-0.5 rounded shadow text-[#ba1a1a] whitespace-nowrap hidden group-hover:block z-10">
-                Model Town: Blocked Drain (High)
-              </span>
-            </div>
-
-            <div className="absolute top-[50%] left-[60%] group cursor-pointer">
-              <span className="relative flex h-4 w-4">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00513a] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-4 w-4 bg-[#00513a] border-2 border-white shadow-sm"></span>
-              </span>
-              <span className="absolute left-5 top-0 bg-white/95 text-[10px] font-bold px-2 py-0.5 rounded shadow text-[#00513a] whitespace-nowrap hidden group-hover:block z-10">
-                Gulberg: Garbage Dump
-              </span>
-            </div>
-
-            <div className="absolute top-[20%] left-[70%] group cursor-pointer">
-              <span className="relative inline-flex rounded-full h-4 w-4 bg-[#ba1a1a] border-2 border-white shadow-sm"></span>
-              <span className="absolute left-5 top-0 bg-white/95 text-[10px] font-bold px-2 py-0.5 rounded shadow text-[#ba1a1a] whitespace-nowrap hidden group-hover:block z-10">
-                DHA: Main Road Pothole
-              </span>
-            </div>
-
-            <div className="absolute top-[65%] left-[30%] group cursor-pointer">
-              <span className="relative inline-flex rounded-full h-4 w-4 bg-[#0060a7] border-2 border-white shadow-sm"></span>
-              <span className="absolute left-5 top-0 bg-white/95 text-[10px] font-bold px-2 py-0.5 rounded shadow text-[#0060a7] whitespace-nowrap hidden group-hover:block z-10">
-                Johar Town: Streetlight
-              </span>
-            </div>
-
-            <div className="absolute top-[80%] left-[55%] group cursor-pointer">
-              <span className="relative inline-flex rounded-full h-4 w-4 bg-[#00513a] border-2 border-white shadow-sm"></span>
-              <span className="absolute left-5 top-0 bg-white/95 text-[10px] font-bold px-2 py-0.5 rounded shadow text-[#00513a] whitespace-nowrap hidden group-hover:block z-10">
-                Garden Town: Water Pipe
-              </span>
-            </div>
-
-            {/* Legend */}
-            <div className="absolute bottom-4 right-4 bg-white/95 p-3 rounded-xl shadow-sm border border-[#e2e3e0] text-xs font-semibold text-[#56615c] backdrop-blur-xs">
-              <div className="flex items-center gap-2 mb-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#ba1a1a]"></div>
-                <span>High Priority</span>
-              </div>
-              <div className="flex items-center gap-2 mb-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#00513a]"></div>
-                <span>Medium Priority</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#0060a7]"></div>
-                <span>Other Issues</span>
-              </div>
-            </div>
           </div>
         </div>
 

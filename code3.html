@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SheharSuno AI - Report Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#f9faf7",
+                        "primary": "#00513a",
+                        "secondary-fixed": "#dae5df",
+                        "inverse-on-surface": "#f0f1ee",
+                        "primary-container": "#0d6b4f",
+                        "surface-variant": "#e2e3e0",
+                        "secondary": "#56615c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#00513b",
+                        "secondary-fixed-dim": "#bec9c3",
+                        "on-primary-fixed": "#002116",
+                        "on-secondary-fixed-variant": "#3f4945",
+                        "on-surface-variant": "#3f4944",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#c1daff",
+                        "inverse-primary": "#85d7b4",
+                        "secondary-container": "#dae5df",
+                        "outline": "#6f7a73",
+                        "surface-container-high": "#e7e8e6",
+                        "primary-fixed": "#a1f3cf",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#bec9c2",
+                        "tertiary-fixed": "#d3e4ff",
+                        "surface-container": "#edeeeb",
+                        "surface": "#f9faf7",
+                        "on-tertiary-fixed-variant": "#004880",
+                        "on-primary-container": "#97e8c5",
+                        "surface-container-highest": "#e2e3e0",
+                        "on-secondary-container": "#5c6762",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#141e1a",
+                        "surface-container-low": "#f3f4f1",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#2e312f",
+                        "tertiary-container": "#0060a7",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#a1c9ff",
+                        "surface-bright": "#f9faf7",
+                        "tertiary": "#004880",
+                        "surface-dim": "#d9dad8",
+                        "on-background": "#191c1b",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#85d7b4",
+                        "surface-tint": "#0e6b4f",
+                        "on-surface": "#191c1b",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#001c38"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "sm": "16px",
+                        "xl": "48px",
+                        "margin-desktop": "40px",
+                        "gutter": "16px",
+                        "xs": "8px",
+                        "lg": "32px",
+                        "margin-mobile": "20px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .civic-glow {
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.04);
+        }
+        /* Loading Animation Styles */
+        .pulse-layer {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        #analysis-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface h-full flex flex-col font-body-md overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-inverse-surface docked full-width top-0 bg-surface-container-low dark:bg-inverse-surface flat no shadows z-40 relative">
+<div class="flex justify-between items-center px-margin-mobile py-xs w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" data-icon="record_voice_over">record_voice_over</span>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">SheharSuno AI</span>
+</div>
+<button class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:bg-secondary-container dark:hover:bg-on-secondary-fixed-variant transition-colors rounded-full px-sm py-xs active:scale-95 transition-transform duration-150">
+                EN | اردو
+            </button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow flex flex-col items-center justify-start px-margin-mobile py-md w-full max-w-screen-md mx-auto relative pb-32">
+<!-- Loading State -->
+<div class="flex flex-col items-center justify-center h-[530px] w-full max-w-md text-center" id="loading-state">
+<div class="relative w-24 h-24 mb-lg flex items-center justify-center">
+<div class="absolute inset-0 bg-primary-container rounded-full pulse-layer"></div>
+<div class="absolute inset-0 bg-primary-container rounded-full pulse-layer" style="animation-delay: 0.5s"></div>
+<div class="relative bg-primary text-on-primary rounded-full w-16 h-16 flex items-center justify-center z-10 shadow-lg">
+<span class="material-symbols-outlined text-[32px]" data-icon="auto_awesome">auto_awesome</span>
+</div>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary mb-xs">Analyzing Report...</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">SheharSuno AI is processing location, extracting context, and drafting formal complaints.</p>
+</div>
+<!-- Analysis Content (Hidden initially) -->
+<div class="w-full flex-col gap-md" id="analysis-content">
+<!-- Header Section -->
+<div class="flex flex-col gap-xs mb-sm">
+<div class="flex items-center justify-between gap-sm flex-wrap">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Blocked drainage near school</h1>
+<span class="inline-flex items-center gap-xs bg-error text-on-error px-3 py-1 rounded-full font-label-md text-label-md uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]" data-icon="warning">warning</span>
+                        HIGH PRIORITY
+                    </span>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+                        Model Town, Lahore
+                    </span>
+<span class="hidden sm:inline">•</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span>
+                        Reported just now
+                    </span>
+<span class="hidden sm:inline">•</span>
+<span class="font-mono text-xs bg-surface-container-high px-2 py-0.5 rounded">ID: SS-2026-0184</span>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-sm mb-lg">
+<!-- Main Image Card -->
+<div class="md:col-span-12 lg:col-span-7 bg-secondary rounded-xl overflow-hidden civic-glow relative h-64 border border-outline-variant/30 group">
+<img alt="Drainage Photo" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A flooded street near a school entrance during daytime. Murky water covers the road, reflecting overcast skies. A blocked drainage grate is visible. The scene is rendered in a realistic, photojournalistic style but slightly desaturated to emphasize the civic issue, with high contrast. The mood is urgent but analytical, fitting a civic reporting app. Clean white UI elements overlay the edges." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDz11szQ8bwuX-Isw7XpxIxflvs5b3OIfWTKOJmhvvOxRKRrVQp_TtmN-23z_9C0rqjxlbYRe4Kg6EOWfhqglVwWIIGs9YAEZojrv_HUIlPdSgoXtKJ23VG7ac_46jchRhurwzgrzsDde6CI1DD3lwri82TFevZIFbtdZgEjMqdPU0v3jw-wDrC1oOdkQU15aujEMYJ8IEf2rWC3kxyGqU243aigmqOjVG-xFdmZYRXycD3EPkWMPw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-sm text-white">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-error-container" data-icon="report_problem">report_problem</span>
+<span class="font-label-md text-label-md text-error-container">AI DETECTED RISK</span>
+</div>
+<p class="font-body-sm text-body-sm text-white/90">Standing water may affect school access and sanitation.</p>
+</div>
+</div>
+<!-- AI Summary Card -->
+<div class="md:col-span-12 lg:col-span-5 bg-secondary-container rounded-xl p-sm border border-outline-variant/50 flex flex-col justify-between civic-glow">
+<div>
+<div class="flex items-center gap-2 mb-xs text-primary">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<h3 class="font-headline-sm text-headline-sm">AI Summary</h3>
+</div>
+<p class="font-body-md text-body-md text-on-secondary-container">A drain is blocked after rain, causing water to collect near a school entrance.</p>
+</div>
+<div class="mt-sm bg-surface-container-lowest/50 rounded-lg p-3">
+<h4 class="font-label-md text-label-md text-primary mb-2 uppercase">Recommended Next Steps</h4>
+<ol class="space-y-2 font-body-sm text-body-sm text-on-secondary-container">
+<li class="flex items-start gap-2">
+<span class="bg-primary/10 text-primary w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">1</span>
+                                Keep children away from standing water.
+                            </li>
+<li class="flex items-start gap-2">
+<span class="bg-primary/10 text-primary w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">2</span>
+                                Place temporary warning barrier if possible.
+                            </li>
+<li class="flex items-start gap-2">
+<span class="bg-primary/10 text-primary w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">3</span>
+                                Share this generated report with local authorities.
+                            </li>
+</ol>
+</div>
+</div>
+<!-- Report Preview Card -->
+<div class="md:col-span-12 bg-surface-container-lowest rounded-xl border border-outline-variant/50 civic-glow overflow-hidden flex flex-col">
+<div class="flex border-b border-outline-variant/30">
+<button class="flex-1 py-3 px-4 text-center font-label-md text-label-md text-primary border-b-2 border-primary bg-primary/5 transition-colors">English Draft</button>
+<button class="flex-1 py-3 px-4 text-center font-label-md text-label-md text-on-surface-variant border-b-2 border-transparent hover:bg-surface-container-low transition-colors">اردو مسودہ</button>
+</div>
+<div class="p-sm md:p-md bg-surface-container-lowest flex-grow">
+<div class="font-mono text-xs text-on-surface-variant mb-4 bg-surface-container p-2 rounded flex justify-between items-center">
+<span>To: Water and Sanitation Agency (WASA), Lahore</span>
+<span class="material-symbols-outlined text-[16px] cursor-pointer hover:text-primary" data-icon="content_copy" onclick="alert('Copied to clipboard')">content_copy</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface whitespace-pre-line">Subject: Urgent: Blocked Drainage Causing Flooding Near School Entrance in Model Town
+
+To Whom It May Concern,
+
+I am writing to report a severely blocked drainage system in Model Town, Lahore. Following recent rainfall, substantial standing water has accumulated directly in front of the local school entrance. 
+
+This presents an immediate sanitation hazard and significantly obstructs safe access for children and staff. Given the high foot traffic and potential health risks associated with stagnant water, I request urgent intervention from maintenance crews to clear the blockage and restore proper drainage.
+
+Location Coordinates attached.
+Case Reference: SS-2026-0184</p>
+</div>
+</div>
+</div>
+<!-- Action Area -->
+<div class="flex flex-col sm:flex-row gap-xs md:gap-sm mt-auto w-full">
+<button class="flex-1 bg-primary text-on-primary rounded-[20px] py-3 px-6 font-headline-sm text-headline-sm hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 active:scale-[0.98]">
+<span class="material-symbols-outlined" data-icon="translate">translate</span>
+                    Generate Urdu Complaint
+                </button>
+<div class="flex flex-row gap-xs md:gap-sm flex-1">
+<button class="flex-1 bg-secondary-container text-on-secondary-container rounded-[20px] py-3 px-4 font-headline-sm text-headline-sm hover:bg-secondary-container/80 transition-colors flex items-center justify-center gap-2 border border-secondary-container active:scale-[0.98]">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+                        Share Report
+                    </button>
+<button class="flex-1 bg-transparent text-primary rounded-[20px] py-3 px-4 font-headline-sm text-headline-sm hover:bg-surface-container transition-colors flex items-center justify-center gap-2 border border-outline-variant active:scale-[0.98]">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                        View Dashboard
+                    </button>
+</div>
+</div>
+<!-- Disclaimer -->
+<div class="mt-md text-center">
+<p class="font-body-sm text-body-sm text-on-surface-variant/70 flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="info">info</span>
+                    SheharSuno provides guidance, not emergency services.
+                </p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Hidden per semantic logic - Transactional/Result screen) -->
+<!-- Suppressed: The user is in a focused journey (Report Result) implying a departure from main navigation. Navigation is handled by the "View Dashboard" action button. -->
+<script>
+        // Simulate loading state transition
+        document.addEventListener("DOMContentLoaded", () => {
+            const loadingState = document.getElementById('loading-state');
+            const analysisContent = document.getElementById('analysis-content');
+
+            setTimeout(() => {
+                loadingState.style.opacity = '0';
+                setTimeout(() => {
+                    loadingState.style.display = 'none';
+                    analysisContent.style.display = 'flex';
+                    // Trigger reflow
+                    void analysisContent.offsetWidth;
+                    analysisContent.style.opacity = '1';
+                }, 500); // Wait for fade out
+            }, 2500); // 2.5s loading simulation
+        });
+    </script>
+</body></html>

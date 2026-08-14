@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+@import "tailwindcss";
+
+@theme inline {
+  /* Pakistan-green color palette */
+  --color-background: #f9faf7;
+  --color-primary: #00513a;
+  --color-primary-container: #0d6b4f;
+  --color-primary-fixed: #a1f3cf;
+  --color-primary-fixed-dim: #85d7b4;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #97e8c5;
+  --color-on-primary-fixed: #002116;
+  --color-on-primary-fixed-variant: #00513b;
+
+  --color-secondary: #56615c;
+  --color-secondary-container: #dae5df;
+  --color-secondary-fixed: #dae5df;
+  --color-secondary-fixed-dim: #bec9c3;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #5c6762;
+  --color-on-secondary-fixed: #141e1a;
+  --color-on-secondary-fixed-variant: #3f4945;
+
+  --color-surface: #f9faf7;
+  --color-surface-dim: #d9dad8;
+  --color-surface-bright: #f9faf7;
+  --color-surface-variant: #e2e3e0;
+  --color-surface-container: #edeeeb;
+  --color-surface-container-low: #f3f4f1;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-high: #e7e8e6;
+  --color-surface-container-highest: #e2e3e0;
+  --color-surface-tint: #0e6b4f;
+  --color-on-surface: #191c1b;
+  --color-on-surface-variant: #3f4944;
+  --color-on-background: #191c1b;
+
+  --color-outline: #6f7a73;
+  --color-outline-variant: #bec9c2;
+
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #93000a;
+
+  --color-tertiary: #004880;
+  --color-tertiary-container: #0060a7;
+  --color-tertiary-fixed: #d3e4ff;
+  --color-tertiary-fixed-dim: #a1c9ff;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #c1daff;
+  --color-on-tertiary-fixed: #001c38;
+  --color-on-tertiary-fixed-variant: #004880;
+
+  --color-inverse-surface: #2e312f;
+  --color-inverse-on-surface: #f0f1ee;
+  --color-inverse-primary: #85d7b4;
+
+  /* Typography */
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+
+  /* Spacing */
+  --spacing-base: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 32px;
+  --spacing-xl: 48px;
+  --spacing-gutter: 16px;
+  --spacing-margin-mobile: 20px;
+  --spacing-margin-desktop: 40px;
+}
+
+/* Material Symbols Outlined */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+.filled-icon {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Hide scrollbar utility */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-on-background);
+  font-family: var(--font-sans);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Community Dashboard - SheharSuno AI</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with specific configuration -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#f9faf7",
+                        "primary": "#00513a",
+                        "secondary-fixed": "#dae5df",
+                        "inverse-on-surface": "#f0f1ee",
+                        "primary-container": "#0d6b4f",
+                        "surface-variant": "#e2e3e0",
+                        "secondary": "#56615c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#00513b",
+                        "secondary-fixed-dim": "#bec9c3",
+                        "on-primary-fixed": "#002116",
+                        "on-secondary-fixed-variant": "#3f4945",
+                        "on-surface-variant": "#3f4944",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#c1daff",
+                        "inverse-primary": "#85d7b4",
+                        "secondary-container": "#dae5df",
+                        "outline": "#6f7a73",
+                        "surface-container-high": "#e7e8e6",
+                        "primary-fixed": "#a1f3cf",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#bec9c2",
+                        "tertiary-fixed": "#d3e4ff",
+                        "surface-container": "#edeeeb",
+                        "surface": "#f9faf7",
+                        "on-tertiary-fixed-variant": "#004880",
+                        "on-primary-container": "#97e8c5",
+                        "surface-container-highest": "#e2e3e0",
+                        "on-secondary-container": "#5c6762",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#141e1a",
+                        "surface-container-low": "#f3f4f1",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#2e312f",
+                        "tertiary-container": "#0060a7",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#a1c9ff",
+                        "surface-bright": "#f9faf7",
+                        "tertiary": "#004880",
+                        "surface-dim": "#d9dad8",
+                        "on-background": "#191c1b",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#85d7b4",
+                        "surface-tint": "#0e6b4f",
+                        "on-surface": "#191c1b",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#001c38"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "sm": "16px",
+                        "xl": "48px",
+                        "margin-desktop": "40px",
+                        "gutter": "16px",
+                        "xs": "8px",
+                        "lg": "32px",
+                        "margin-mobile": "20px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Subdued scrollbar for horizontal lists */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased pb-24 md:pb-8">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-inverse-surface text-primary dark:text-primary-fixed docked full-width top-0 bg-surface-container-low dark:bg-inverse-surface flat no shadows z-40 sticky top-0">
+<div class="flex justify-between items-center px-margin-mobile py-xs w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-2 hover:bg-secondary-container dark:hover:bg-on-secondary-fixed-variant transition-colors rounded-full p-2 cursor-pointer">
+<span class="material-symbols-outlined filled-icon text-primary dark:text-primary-fixed">record_voice_over</span>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed hidden md:block">SheharSuno AI</span>
+</div>
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed text-center absolute left-1/2 -translate-x-1/2 md:hidden">
+                SheharSuno
+            </div>
+<!-- Web Navigation Cluster -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:bg-secondary-container dark:hover:bg-on-secondary-fixed-variant transition-colors px-3 py-1 rounded-full" href="#">Report</a>
+<a class="font-label-md text-label-md text-primary dark:text-primary-fixed font-bold bg-primary-container/10 px-3 py-1 rounded-full pointer-events-none" href="#">Dashboard</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:bg-secondary-container dark:hover:bg-on-secondary-fixed-variant transition-colors px-3 py-1 rounded-full" href="#">How It Works</a>
+</nav>
+<button class="flex items-center gap-2 bg-primary text-on-primary hover:opacity-90 px-4 py-2 rounded-full transition-all text-sm font-semibold active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined text-sm">add</span>
+<span class="hidden sm:inline">Report New Issue</span>
+<span class="sm:hidden">Report</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-screen-xl mx-auto px-margin-mobile pt-md md:pt-lg">
+<div class="mb-md">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-xs">Community Dashboard</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Real-time civic insights for Lahore district.</p>
+</div>
+<!-- Metric Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-xs md:gap-gutter mb-md">
+<!-- Metric 1: Total Reports -->
+<div class="bg-surface-container-low border border-surface-variant rounded-xl p-sm flex items-center justify-between">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Reports Today</p>
+<p class="font-headline-lg text-headline-lg text-primary">32</p>
+</div>
+<div class="h-12 w-12 bg-primary-container rounded-full flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined filled-icon">assignment</span>
+</div>
+</div>
+<!-- Metric 2: High Priority -->
+<div class="bg-surface-container-low border border-surface-variant rounded-xl p-sm flex items-center justify-between">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">High Priority</p>
+<div class="flex items-end gap-2">
+<p class="font-headline-lg text-headline-lg text-error">8</p>
+<div class="flex items-center text-error bg-error-container px-2 py-0.5 rounded-full mb-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span class="text-xs font-bold ml-1">+2</span>
+</div>
+</div>
+</div>
+<div class="h-12 w-12 bg-error-container rounded-full flex items-center justify-center text-on-error-container">
+<span class="material-symbols-outlined filled-icon">warning</span>
+</div>
+</div>
+<!-- Metric 3: Resolution Rate -->
+<div class="bg-surface-container-low border border-surface-variant rounded-xl p-sm flex items-center justify-between">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Resolved</p>
+<p class="font-headline-lg text-headline-lg text-primary">71%</p>
+</div>
+<!-- Simple CSS Circle Progress -->
+<div class="relative w-12 h-12 flex items-center justify-center rounded-full bg-surface-variant" style="background: conic-gradient(#00513a 71%, #e2e3e0 0);">
+<div class="absolute inset-1 bg-surface-container-low rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-md lg:gap-gutter mb-xl">
+<!-- Map Visualization -->
+<div class="lg:col-span-2 bg-surface-container-low border border-surface-variant rounded-xl overflow-hidden flex flex-col h-[400px]">
+<div class="p-sm border-b border-surface-variant flex justify-between items-center bg-surface-container-lowest">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Live Issue Map</h2>
+<span class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Lahore
+                    </span>
+</div>
+<!-- Map Image Placeholder with highly detailed prompt -->
+<div class="relative w-full flex-grow bg-surface-variant" data-alt="A highly stylized, minimalist digital map of Lahore city grid. The aesthetic is clean and modern, using an off-white background with subtle light gray and soft green road networks. The design resembles a high-end civic technology interface, completely flat with no aggressive 3D shading. The map is sparsely populated with five distinctly colored, glowing digital pins indicating active issue reports, enhancing the high-tech, light-mode civic tracker vibe." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCK5lRwi1QOx6oSc9-oViri0YXPq45EKK4xVZHCa42zYXc3olU6ih3zjkU4dgdz0QZiOhfwZxDPoapdnK5Aza6MJwmYyr1RG2LQ7eS9CL8QuYFbFF20jM7gGqLgS3w4wt13nGrePb-GkGSBooigh_pobL9rhFXcP2rbYXVKrPDY_LKj5HvBjrUF1SnPiq5-eQFOULIFCHndJae3BIm67MgJbxqkjz6uT8ywuUDjqpCDr1A8kRrwPXY')">
+<!-- Overlay Pins purely for structural representation -->
+<div class="absolute top-[30%] left-[40%] bg-error w-4 h-4 rounded-full border-2 border-surface-container-lowest shadow-sm"></div>
+<div class="absolute top-[50%] left-[60%] bg-primary w-4 h-4 rounded-full border-2 border-surface-container-lowest shadow-sm"></div>
+<div class="absolute top-[20%] left-[70%] bg-error w-4 h-4 rounded-full border-2 border-surface-container-lowest shadow-sm"></div>
+<div class="absolute top-[65%] left-[30%] bg-tertiary-container w-4 h-4 rounded-full border-2 border-surface-container-lowest shadow-sm"></div>
+<div class="absolute top-[80%] left-[55%] bg-primary w-4 h-4 rounded-full border-2 border-surface-container-lowest shadow-sm"></div>
+</div>
+</div>
+<!-- Right Column: Breakdown & List -->
+<div class="flex flex-col gap-md">
+<!-- Category Breakdown -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-sm">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Category Breakdown</h2>
+<div class="space-y-3">
+<!-- Drainage -->
+<div>
+<div class="flex justify-between font-body-sm text-body-sm mb-1">
+<span class="text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">water_drop</span> Drainage</span>
+<span class="font-bold text-primary">12</span>
+</div>
+<div class="w-full bg-surface-variant h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary-container h-full rounded-full" style="width: 40%"></div>
+</div>
+</div>
+<!-- Garbage -->
+<div>
+<div class="flex justify-between font-body-sm text-body-sm mb-1">
+<span class="text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">delete</span> Garbage</span>
+<span class="font-bold text-primary">8</span>
+</div>
+<div class="w-full bg-surface-variant h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 25%"></div>
+</div>
+</div>
+<!-- Road -->
+<div>
+<div class="flex justify-between font-body-sm text-body-sm mb-1">
+<span class="text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">add_road</span> Road</span>
+<span class="font-bold text-primary">5</span>
+</div>
+<div class="w-full bg-surface-variant h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 15%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Reports Preview (Small screen context) -->
+<div class="bg-surface-container-low border border-surface-variant rounded-xl p-sm flex-grow">
+<div class="flex justify-between items-center mb-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Recent Reports</h2>
+<button class="text-primary text-sm font-semibold hover:underline">View All</button>
+</div>
+<ul class="space-y-0 relative">
+<!-- List Item 1 -->
+<li class="py-3 border-b border-outline-variant/30 flex gap-3 last:border-0 items-start">
+<div class="w-2 h-2 rounded-full bg-error mt-2 flex-shrink-0"></div>
+<div class="flex-grow min-w-0">
+<p class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Blocked drainage near school</p>
+<div class="flex items-center text-xs text-on-surface-variant mt-1 gap-2">
+<span class="truncate">Model Town</span>
+<span>•</span>
+<span>2m ago</span>
+</div>
+</div>
+</li>
+<!-- List Item 2 -->
+<li class="py-3 border-b border-outline-variant/30 flex gap-3 last:border-0 items-start">
+<div class="w-2 h-2 rounded-full bg-orange-400 mt-2 flex-shrink-0"></div>
+<div class="flex-grow min-w-0">
+<p class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Garbage uncollected for 7 days</p>
+<div class="flex items-center text-xs text-on-surface-variant mt-1 gap-2">
+<span class="truncate">Gulberg</span>
+<span>•</span>
+<span>34m ago</span>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden bg-secondary-container dark:bg-on-secondary-fixed-variant text-primary dark:text-primary-fixed fixed full-width bottom-0 z-50 rounded-t-xl bg-secondary-container/80 backdrop-blur-md shadow-sm fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe">
+<button class="flex flex-col items-center justify-center text-on-secondary-container dark:text-secondary-fixed-dim px-4 py-1 hover:opacity-80 transition-opacity active:scale-90 transition-all">
+<span class="material-symbols-outlined text-[24px]">add_circle</span>
+<span class="font-label-md text-label-md mt-1">Report</span>
+</button>
+<!-- Active Navigation item based on context "Dashboard" -->
+<button class="flex flex-col items-center justify-center bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container rounded-full px-4 py-1 hover:opacity-80 transition-opacity active:scale-90 transition-all pointer-events-none">
+<span class="material-symbols-outlined text-[24px] filled-icon">dashboard</span>
+<span class="font-label-md text-label-md mt-1">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-secondary-container dark:text-secondary-fixed-dim px-4 py-1 hover:opacity-80 transition-opacity active:scale-90 transition-all">
+<span class="material-symbols-outlined text-[24px]">info</span>
+<span class="font-label-md text-label-md mt-1">How It Works</span>
+</button>
+</nav>
+</body></html>

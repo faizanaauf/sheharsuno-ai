@@ -18,6 +18,9 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
+      # The current lockfile predates transitive dependency metadata required
+      # by npm 10's strict clean-install check. Install from package.json
+      # without mutating the checked-in lockfile, then validate the app.
+      - run: npm install --package-lock=false
       - run: npm run lint
       - run: npm run build

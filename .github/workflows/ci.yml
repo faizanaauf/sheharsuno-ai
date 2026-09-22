@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      # The current lockfile predates transitive dependency metadata required
+      # by npm 10's strict clean-install check. Install from package.json
+      # without mutating the checked-in lockfile, then validate the app.
+      - run: npm install --package-lock=false
+      - run: npm run lint
+      - run: npm run build
